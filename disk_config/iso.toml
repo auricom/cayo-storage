@@ -2,13 +2,29 @@
 contents = """
 text
 zerombr
-clearpart --all --initlabel --disklabel=gpt
+ignoredisk --only-use=disk/by-id/nvme-WD_Red_SN700_1000GB_22012N800363
+clearpart --initlabel --disklabel=gpt --drives=disk/by-id/nvme-WD_Red_SN700_1000GB_22012N800363 --all
 autopart --type=lvm --fstype=xfs --noswap
 network --bootproto=dhcp --device=link --activate --onboot=on
 timezone UTC
 rootpw --lock
-user --name=core --homedir=/var/home/core --password="password" --plaintext --groups=wheel
+user --name=core --homedir=/var/home/core --password="password" --plaintext --groups=wheel --shell=/usr/bin/fish
 bootloader --append="console=tty0 console=ttyS0,115200"
+%post --interpreter=/usr/bin/bash
+# Changing default shell for root
+chsh --shell /usr/bin/fish root
+
+# Configures passwordless sudo for wheel group
+cat > /etc/sudoers.d/sudo-group <<'EOF'
+%wheel  ALL=(ALL)       NOPASSWD: ALL
+EOF
+chmod 440 /etc/sudoers.d/sudo-group
+
+# NUT
+cat > /etc/udev/rules.d/99-nut-eaton.rules <<'EOF'
+SUBSYSTEM=="usb", ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="0660", GROUP=101
+EOF
+%end
 """
 
 [customizations.installer.modules]

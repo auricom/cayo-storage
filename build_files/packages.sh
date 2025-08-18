@@ -10,6 +10,7 @@ dnf install -y \
 	fd-find \
 	fish \
 	fzf \
+	libusb1-devel \
 	nfs-utils \
 	nut \
 	samba \
