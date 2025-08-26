@@ -4,7 +4,7 @@ text
 zerombr
 ignoredisk --only-use=disk/by-id/nvme-WD_Red_SN700_1000GB_22012N800363
 clearpart --initlabel --disklabel=gpt --drives=disk/by-id/nvme-WD_Red_SN700_1000GB_22012N800363 --all
-autopart --type=lvm --fstype=xfs --noswap
+autopart --type=lvm --fstype=xfs --noswap --nohome
 network --bootproto=dhcp --device=link --activate --onboot=on
 timezone UTC
 rootpw --lock
@@ -24,6 +24,9 @@ chmod 440 /etc/sudoers.d/sudo-group
 cat > /etc/udev/rules.d/99-nut-eaton.rules <<'EOF'
 SUBSYSTEM=="usb", ATTR{idVendor}=="0463", ATTR{idProduct}=="ffff", MODE="0660", GROUP=101
 EOF
+
+# Orches
+mkdir -p /var/lib/orches /etc/containers/systemd
 %end
 """
 

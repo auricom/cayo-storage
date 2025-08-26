@@ -18,9 +18,13 @@ dnf install -y \
 	usbutils
 
 # Age
-curl -sSfL --output /usr/sbin/age https://dl.filippo.io/age/latest?for=linux/amd64
+age_version=$(curl -sX GET "https://api.github.com/repos/FiloSottile/age/releases/latest" | jq --raw-output '.tag_name')
+age_installer=$(mktemp --directory)
+curl -sSfL --output "${age_installer}/age.tar.gz" "https://github.com/FiloSottile/age/releases/latest/download/age-${age_version}-linux-amd64.tar.gz"
+tar xvf "${age_installer}/age.tar.gz" -C "${age_installer}"
+mv "${age_installer}"/age/age /usr/sbin/age
 chown root:root /usr/sbin/age
-chmod +x /usr/sbin/age
+rm -rf "${age_installer}"
 
 # Atuin
 atuin_installer=$(mktemp --directory)
