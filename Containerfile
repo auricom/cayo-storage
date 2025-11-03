@@ -3,7 +3,7 @@ FROM scratch AS ctx
 COPY build_files /
 
 # Base Image
-FROM ghcr.io/ublue-os/cayo:centos@sha256:37b923539fa4a1ffa2d1df4e4253134c06017816a85e0f859de95c9e49cb8e51
+FROM ghcr.io/ublue-os/cayo:centos@sha256:f3f1737be5d075d368080119e73fa838b9bf74e52dcf9928e2db1c642b6df03c
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
